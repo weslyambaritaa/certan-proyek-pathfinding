@@ -30,48 +30,148 @@ WARNA_AI_ASTAR = (255, 100, 0)
 WARNA_KARPET = (139, 69, 19)
 
 
-# --- FUNGSI PEMBUAT SPRITE (16x16) ---
-# (Tidak ada perubahan di sini, tetap detail)
-
 def create_sprite(base_surface, scale_size):
     """Helper untuk mengatur transparansi dan menskalakan surface."""
-    base_surface.set_colorkey(WARNA_HITAM)
+    base_surface.set_colorkey(WARNA_HITAM) # Warna Hitam (0,0,0) akan transparan
     return pygame.transform.scale(base_surface, (scale_size, scale_size))
 
 def create_player_sprite(size):
+    """Membuat sprite pixel art 16x16 untuk Pemain dengan detail dan shading."""
     surf = pygame.Surface((16, 16))
-    skin = (255, 219, 172); hair = (80, 48, 32); shirt = WARNA_BIRU; pants = (50, 50, 100); shoes = (30, 30, 30)
-    pygame.draw.rect(surf, hair, (4, 2, 8, 3)); pygame.draw.rect(surf, skin, (4, 5, 8, 3))
-    pygame.draw.rect(surf, (0, 0, 0), (5, 6, 1, 1)); pygame.draw.rect(surf, (0, 0, 0), (10, 6, 1, 1))
-    pygame.draw.rect(surf, shirt, (3, 8, 10, 4)); pygame.draw.rect(surf, skin, (1, 8, 2, 3)); pygame.draw.rect(surf, skin, (13, 8, 2, 3))
-    pygame.draw.rect(surf, pants, (4, 12, 3, 2)); pygame.draw.rect(surf, pants, (9, 12, 3, 2))
-    pygame.draw.rect(surf, shoes, (4, 14, 3, 2)); pygame.draw.rect(surf, shoes, (9, 14, 3, 2))
+    
+    # Palet Warna Pemain
+    skin = (255, 219, 172)
+    skin_shadow = (234, 192, 144)
+    hair = (80, 48, 32)
+    hair_highlight = (110, 78, 62)
+    shirt = (0, 100, 255)
+    shirt_shadow = (0, 70, 205)
+    pants = (50, 50, 100)
+    pants_shadow = (30, 30, 70)
+    shoes = (100, 50, 20)
+    shoes_highlight = (130, 80, 50)
+    
+    # Gambar dari belakang ke depan (bayangan dulu)
+    # Rambut
+    pygame.draw.rect(surf, hair, (4, 2, 8, 5))
+    pygame.draw.rect(surf, hair_highlight, (5, 2, 6, 1))
+    # Wajah
+    pygame.draw.rect(surf, skin_shadow, (4, 5, 8, 3)) # Leher
+    pygame.draw.rect(surf, skin, (4, 4, 8, 3))
+    # Mata
+    pygame.draw.rect(surf, (255, 255, 255), (5, 5, 2, 1)) # Putih mata
+    pygame.draw.rect(surf, (255, 255, 255), (9, 5, 2, 1))
+    pygame.draw.rect(surf, (0, 0, 0), (6, 5, 1, 1)) # Pupil
+    pygame.draw.rect(surf, (0, 0, 0), (9, 5, 1, 1))
+    # Baju
+    pygame.draw.rect(surf, shirt_shadow, (3, 7, 10, 5))
+    pygame.draw.rect(surf, shirt, (4, 7, 8, 4))
+    # Lengan
+    pygame.draw.rect(surf, skin_shadow, (1, 8, 2, 3))
+    pygame.draw.rect(surf, skin, (1, 7, 2, 2))
+    pygame.draw.rect(surf, skin_shadow, (13, 8, 2, 3))
+    pygame.draw.rect(surf, skin, (13, 7, 2, 2))
+    # Celana
+    pygame.draw.rect(surf, pants_shadow, (4, 12, 8, 2))
+    pygame.draw.rect(surf, pants, (5, 12, 2, 2))
+    pygame.draw.rect(surf, pants, (9, 12, 2, 2))
+    # Sepatu
+    pygame.draw.rect(surf, shoes, (4, 14, 3, 2))
+    pygame.draw.rect(surf, shoes, (9, 14, 3, 2))
+    pygame.draw.rect(surf, shoes_highlight, (4, 14, 2, 1))
+    pygame.draw.rect(surf, shoes_highlight, (9, 14, 2, 1))
+    
     return create_sprite(surf, size)
 
 def create_guard_sprite(size, color):
+    """Membuat sprite pixel art 16x16 untuk Penjaga dengan detail dan shading."""
     surf = pygame.Surface((16, 16))
-    skin = (255, 200, 150); uniform = (80, 80, 90); pants = (40, 40, 50); shoes = (20, 20, 20); badge = (255, 223, 0)
-    pygame.draw.rect(surf, color, (3, 1, 10, 4)); pygame.draw.rect(surf, (50, 50, 50), (2, 4, 12, 1))
-    pygame.draw.rect(surf, skin, (4, 5, 8, 3)); pygame.draw.rect(surf, (0, 0, 0), (5, 6, 1, 1)); pygame.draw.rect(surf, (0, 0, 0), (10, 6, 1, 1))
-    pygame.draw.rect(surf, uniform, (3, 8, 10, 4)); pygame.draw.rect(surf, badge, (5, 9, 2, 2))
-    pygame.draw.rect(surf, skin, (1, 8, 2, 3)); pygame.draw.rect(surf, skin, (13, 8, 2, 3))
-    pygame.draw.rect(surf, pants, (4, 12, 3, 2)); pygame.draw.rect(surf, pants, (9, 12, 3, 2))
-    pygame.draw.rect(surf, shoes, (4, 14, 3, 2)); pygame.draw.rect(surf, shoes, (9, 14, 3, 2))
+    
+    # Palet Warna Penjaga
+    skin_shadow = (215, 160, 110) # Lebih gelap karena di bawah topi
+    uniform = (80, 80, 90)
+    uniform_shadow = (60, 60, 70)
+    pants = (40, 40, 50)
+    pants_shadow = (25, 25, 35)
+    shoes = (20, 20, 20)
+    badge = (255, 223, 0)
+    badge_highlight = (255, 255, 100)
+    
+    # Topi
+    pygame.draw.rect(surf, color, (3, 1, 10, 4))
+    pygame.draw.rect(surf, (50, 50, 50), (2, 4, 12, 2)) # Brim
+    # Wajah (dalam bayangan topi)
+    pygame.draw.rect(surf, skin_shadow, (4, 5, 8, 4))
+    # Mata
+    pygame.draw.rect(surf, (0, 0, 0), (5, 6, 2, 1))
+    pygame.draw.rect(surf, (0, 0, 0), (9, 6, 2, 1))
+    # Seragam
+    pygame.draw.rect(surf, uniform_shadow, (3, 9, 10, 4))
+    pygame.draw.rect(surf, uniform, (4, 9, 8, 3))
+    # Lencana
+    pygame.draw.rect(surf, badge, (5, 10, 2, 2))
+    pygame.draw.rect(surf, badge_highlight, (5, 10, 1, 1))
+    # Sabuk
+    pygame.draw.line(surf, (30, 30, 30), (3, 12), (12, 12))
+    # Celana
+    pygame.draw.rect(surf, pants_shadow, (4, 13, 8, 2))
+    pygame.draw.rect(surf, pants, (5, 13, 2, 2))
+    pygame.draw.rect(surf, pants, (9, 13, 2, 2))
+    # Sepatu
+    pygame.draw.rect(surf, shoes, (4, 15, 3, 1))
+    pygame.draw.rect(surf, shoes, (9, 15, 3, 1))
+    
     return create_sprite(surf, size)
 
 def create_diamond_sprite(size):
-    surf = pygame.Surface((16, 16)); main_color = WARNA_DIAMOND; light = (200, 255, 255)
-    points = [(8, 2), (2, 7), (8, 14), (14, 7)]; pygame.draw.polygon(surf, main_color, points)
-    pygame.draw.line(surf, light, (8, 2), (8, 14), 1); pygame.draw.line(surf, light, (2, 7), (14, 7), 1)
-    pygame.draw.rect(surf, WARNA_PUTIH, (5, 4, 2, 2))
+    """Membuat sprite pixel art 16x16 untuk Berlian dengan segi dan kilau."""
+    surf = pygame.Surface((16, 16))
+    
+    # Palet Warna Berlian
+    dark = (0, 150, 170)
+    medium = (0, 225, 255)
+    light = (150, 255, 255)
+    sparkle = (255, 255, 255)
+
+    # Menggambar segi-segi sebagai poligon
+    # Bagian bawah
+    pygame.draw.polygon(surf, dark, [(8, 14), (2, 7), (14, 7)])
+    # Bagian atas
+    pygame.draw.polygon(surf, medium, [(8, 2), (2, 7), (14, 7)])
+    # Facet tengah
+    pygame.draw.polygon(surf, light, [(8, 2), (2, 7), (8, 7)])
+    # Garis outline untuk kejelasan
+    pygame.draw.line(surf, light, (8, 2), (8, 14), 1)
+    pygame.draw.line(surf, light, (2, 7), (14, 7), 1)
+    # Kilau
+    pygame.draw.rect(surf, sparkle, (4, 5, 2, 2))
+    pygame.draw.rect(surf, sparkle, (12, 8, 1, 1))
+    
     return create_sprite(surf, size)
 
 def create_exit_sprite(size):
-    surf = pygame.Surface((16, 16)); door_color = WARNA_HIJAU; frame_color = (0, 100, 0); knob_color = (255, 223, 0)
-    pygame.draw.rect(surf, frame_color, (3, 1, 10, 15)); pygame.draw.rect(surf, door_color, (4, 2, 8, 13))
-    pygame.draw.rect(surf, knob_color, (10, 7, 2, 2))
+    """Membuat sprite pixel art 16x16 untuk Pintu Keluar dengan shading."""
+    surf = pygame.Surface((16, 16))
+    
+    # Palet Warna Pintu
+    frame_dark = (60, 40, 20)
+    frame_light = (100, 70, 40)
+    door_dark = (0, 150, 0)
+    door_light = (0, 200, 0)
+    knob = (255, 223, 0)
+    knob_highlight = (255, 255, 150)
+    
+    # Frame Pintu
+    pygame.draw.rect(surf, frame_dark, (3, 1, 11, 15))
+    pygame.draw.rect(surf, frame_light, (4, 2, 9, 13))
+    # Pintu
+    pygame.draw.rect(surf, door_dark, (5, 3, 7, 11))
+    pygame.draw.rect(surf, door_light, (5, 3, 7, 5)) # Bagian atas lebih terang
+    # Gagang Pintu
+    pygame.draw.rect(surf, knob, (10, 7, 2, 2))
+    pygame.draw.rect(surf, knob_highlight, (10, 7, 1, 1))
+    
     return create_sprite(surf, size)
-
 # --- ----------------------------- ---
 
 
