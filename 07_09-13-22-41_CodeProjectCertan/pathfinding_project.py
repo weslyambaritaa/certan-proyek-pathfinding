@@ -12,7 +12,7 @@ import os
 
 # --- KONFIGURASI TAMPILAN (PYGAME) ---
 WIDTH = 800
-ROWS = 25
+ROWS = 30
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
 pygame.display.set_caption("Proyek 1 AI: The Diamond Heist (BFS vs A*)")
 pygame.font.init()
